@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>娱乐赛事大厅</title>
+    <style>
+        :root {
+            --primary: #ff6b6b;
+            --secondary: #4a90e2;
+            --background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+ 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+ 
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            min-height: 100vh;
+            background: var(--background);
+            padding: 20px;
+        }
+ 
+        .main-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 40px;
+        }
+ 
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            letter-spacing: 1px;
+        }
+ 
+        .game-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+ 
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            cursor: pointer;
+            background: rgba(255,255,255,0.9);
+        }
+ 
+        .card-title {
+            font-size: 1.2em;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+ 
+        .arrow {
+            width: 24px;
+            height: 24px;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+ 
+        .arrow::after {
+            content: "➔";
+            position: absolute;
+            transition: all 0.3s ease;
+        }
+ 
+        .card-content {
+            max-height: 0;
+            padding: 0 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+ 
+        .expanded .card-content {
+            max-height: 500px;
+            padding: 20px;
+        }
+ 
+        .expanded .arrow {
+            transform: rotate(90deg);
+        }
+ 
+        .game-detail {
+            line-height: 1.6;
+            color: #666;
+        }
+ 
+        .action-button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+ 
+        .action-button:hover {
+            transform: translateY(-2px);
+        }
+ 
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .card-header {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <h1>🎉 娱乐赛列表</h1>
+
+        <div class="game-card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <span class="card-title">热点打狙</span>
+                <div class="arrow"></div>
+            </div>
+            <div class="card-content">
+                <div class="game-detail">
+                    <p>模式选择热点<br>
+                    地图推荐攻坚训练场，枪火战区，装卸货场<br>
+                    <hr>
+                    规则：<br>
+                    所有人主武器只能使用栓狙，副武器选择毒刺，可以切刀赶路但不能用来杀人<br>
+                    道具禁止催泪弹</p>
+                    <a href="https://www.douyin.com/video/7323999790482722086"><button class="action-button" onclick="showQuizPanel()">灵感来源</button></a>
+                </div>
+            </div>
+        </div>
+ 
+        <div class="game-card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <span class="card-title">闪光弹混战</span>
+                <div class="arrow"></div>
+            </div>
+            <div class="card-content">
+                <div class="game-detail">
+                    <p>模式选择个人竞技<br>
+                    血量改为1<br>
+                    投掷物选择无限<br>
+                    <hr>
+                    规则：<br>
+                    所有人底牌选择高级战术，投掷物改为闪光弹，震撼弹<br>
+                    可选择将红色芯片改为精力充沛或军火库</p>
+                </div>
+            </div>
+        </div>
+ 
+        <div class="game-card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <span class="card-title">五子棋</span>
+                <div class="arrow"></div>
+            </div>
+            <div class="card-content">
+                <div class="game-detail">
+                    <p>模式选择爆破<br>
+                    地图选择滨海酒镇<br>
+                    时间改为1200，回合改为1<br>
+                    关闭投掷物限制<br>
+                    <hr>
+                    规则：<br>
+                    道具选择C4，红色芯片选择精力充沛<br>
+                    双方派一个人进行单挑决定先手<br>
+                    双方前往守方家中，每方队伍派一个人扔C4<br>
+                    当五子相连，输的一方全部进入C4中间爆炸</p>
+                </div>
+            </div>
+        </div>
+ 
+        <div class="game-card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <span class="card-title">大转盘</span>
+                <div class="arrow"></div>
+            </div>
+            <div class="card-content">
+                <div class="game-detail">
+                    <p>模式选择爆破<br>
+                    回合改为3<br>
+                    <hr>
+                    规则：<br>
+                    由主办人抽取一个限制<br>
+                    所有玩家在这一局内必须遵守这个限制</p>
+                    <a href="./zhuanpan.html"><button class="action-button" onclick="showQuizPanel()">抽取限制</button></a>
+                    <a href="https://www.bilibili.com/video/BV1MiLyzhEuD"><button class="action-button" onclick="showQuizPanel()">灵感来源</button></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <span class="card-title">空投大乱斗</span>
+                <div class="arrow"></div>
+            </div>
+            <div class="card-content">
+                <div class="game-detail">
+                    <p>模式选择空投区<br>
+                    <hr>
+                    规则：<br>
+                    只允许使用空投中的连杀攻击对方<br>
+                    可以使用毒刺反制大连杀<br>
+                    可以使用以下道具与技能干扰敌人</p>
+                    <a href="https://www.bilibili.com/video/BV1bs421P7gJ/"><button class="action-button" onclick="showQuizPanel()">灵感来源</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+    <script>
+        function toggleCard(header) {
+            const card = header.parentElement; 
+            const isExpanded = card.classList.contains('expanded'); 
+            
+            document.querySelectorAll('.expanded').forEach(item  => {
+                if(item !== card) item.classList.remove('expanded'); 
+            });
+ 
+            card.classList.toggle('expanded'); 
+            
+            if(!isExpanded && window.innerWidth  < 768) {
+                card.scrollIntoView({  behavior: 'smooth', block: 'start' });
+            }
+        }
+ 
+        function startGame(gameType) {
+            alert(`正在跳转到 ${gameType} 游戏界面...`);
+        }
+    </script>
+</body>
+</html>

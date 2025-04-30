@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>限制抽取</title>
+    <style>
+        :root {
+            --primary: #4a90e2;
+            --secondary: #ff6b6b;
+            --background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            min-height: 100vh;
+            background: var(--background);
+            padding: 20px;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-bottom: 30px;
+        }
+
+        .main-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 40px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            letter-spacing: 1px;
+        }
+
+        .input-section {
+            margin-bottom: 30px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #357abd;
+            transform: translateY(-2px);
+        }
+
+        .result-container {
+            text-align: center;
+            margin-top: 40px;
+            position: relative;
+        }
+
+        .slot-machine {
+            display: inline-block;
+            font-size: 2em;
+            font-weight: bold;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            min-height: 100px;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="toolbar">
+        <a href="yule.html" class="btn btn-secondary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                <path d="M13 2v7h7"></path>
+            </svg>
+            返回
+        </a>
+    </nav>
+
+    <div class="main-container">
+        <h1>🎰限制抽取</h1>
+
+        <div class="input-section">
+            <textarea id="items"
+                placeholder="请输入可抽取内容，每行一个...
+默认已预设常见惩罚条目，可覆盖修改">
+看见人必须一直跳跃
+只能蹲着走路
+退弹到一颗
+只能用投掷物
+只能用近战
+只能用手枪
+</textarea>
+        </div>
+
+        <button onclick="startSlotMachine()" class="btn btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12" y2="16"></line>
+            </svg>
+            开始抽取
+        </button>
+
+        <div class="result-container">
+            <div id="slotMachine" class="slot-machine">等待抽取...</div>
+        </div>
+    </div>
+
+    <script>
+        const defaultItems = [
+            "看见人必须一直跳跃",
+            "只能蹲着走路",
+            "退弹到一颗",
+            "只能用投掷物",
+            "只能用近战",
+            "只能用手枪"
+        ];
+
+        let isAnimating = false;
+
+        function startSlotMachine() {
+            if (isAnimating) return;
+            
+            isAnimating = true;
+            const slot = document.getElementById('slotMachine');
+            const items = getItems();
+            
+
+            if (items.length < 3) {
+                alert('⚠️ 请至少输入3个有效条目');
+                isAnimating = false;
+                return;
+            }
+
+
+            slot.style.transition = 'none';
+            slot.textContent = 'กำลังหมุน...';
+
+            let currentIndex = 0;
+            const interval = setInterval(() => {
+                currentIndex = (currentIndex + 1) % items.length;
+                slot.textContent = items[currentIndex];
+            }, 100);
+
+            setTimeout(() => {
+                clearInterval(interval);
+                
+                setTimeout(() => {
+                    const resultIndex = Math.floor(Math.random() * items.length);
+                    slot.style.transition = 'opacity 0.5s ease-out';
+                    slot.textContent = items[resultIndex];
+                    isAnimating = false;
+                }, 200);
+            }, 1000);
+        }
+
+        function getItems() {
+            const input = document.getElementById('items').value.trim();
+            if (!input) return [...defaultItems];
+            
+            return input.split('\n')
+                     .map(item => item.trim())
+                     .filter(item => item)
+                     .concat(defaultItems) 
+                     .filter((item, index, self) => self.indexOf(item) === index); 
+        }
+    </script>
+</body>
+</html>
