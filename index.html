@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>战队赛分队</title>
     <style>
         :root {
@@ -28,6 +28,7 @@
             display: flex;
             gap: 15px;
             justify-content: flex-end;
+            align-items: center;
             margin-bottom: 30px;
         }
 
@@ -167,12 +168,6 @@
                 gap: 10px;
             }
 
-            .team-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-
             .max-input {
                 width: 100%;
             }
@@ -212,24 +207,27 @@
             ></textarea>
         </div>
 
-        <button onclick="randomizeTeams()" class="btn btn-primary">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M1 4v6h6"></path>
-                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
-            </svg>
-            <span>分队</span>
-        </button>
+        <div class="toolbar">
+            <button onclick="randomizeTeams()" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 4v6h6"></path>
+                    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                </svg>
+                <span>分队</span>
+            </button>
+            <p>每队人数：</p>
+            <input type="number" 
+                   id="maxPerTeam" 
+                   class="max-input"
+                   min="1" 
+                   value="5"
+                   placeholder="每队最大人数">
+        </div>
 
         <div class="teams-container">
             <div id="teamRed" class="team-card team-red">
                 <div class="team-header">
                     <span class="team-title">🔴 红队</span>
-                    <input type="number" 
-                           id="redMax" 
-                           class="max-input"
-                           min="1" 
-                           value="5"
-                           placeholder="最大人数">
                 </div>
                 <div class="team-members">等待分组...</div>
             </div>
@@ -237,12 +235,6 @@
             <div id="teamBlue" class="team-card team-blue">
                 <div class="team-header">
                     <span class="team-title">🔵 蓝队</span>
-                    <input type="number" 
-                           id="blueMax" 
-                           class="max-input"
-                           min="1" 
-                           value="5"
-                           placeholder="最大人数">
                 </div>
                 <div class="team-members">等待分组...</div>
             </div>
@@ -256,10 +248,10 @@
                 .split('\n')
                 .filter(name => name.trim());
 
-            let redMax = parseInt(document.getElementById('redMax').value) || 5;
-            let blueMax = parseInt(document.getElementById('blueMax').value) || 5;
-            redMax = Math.max(1, redMax);
-            blueMax = Math.max(1, blueMax);
+            let maxPerTeam = parseInt(document.getElementById('maxPerTeam').value) || 5;
+            maxPerTeam = Math.max(1, maxPerTeam);
+            const redMax = maxPerTeam;
+            const blueMax = maxPerTeam;
             const totalMax = redMax + blueMax;
 
             if (names.length < 2) {
@@ -276,9 +268,14 @@
             };
 
             const shuffled = shuffle([...names]);
-            const selected = shuffled.slice(0, totalMax);
-            const teamRed = selected.slice(0, redMax);
-            const teamBlue = selected.slice(redMax, redMax + blueMax);
+            const n = Math.min(shuffled.length, totalMax);
+            const maxEven = n % 2 === 0 ? n : n - 1;
+            const redCount = Math.min(redMax, Math.floor(maxEven / 2));
+            const blueCount = Math.min(blueMax, maxEven - redCount);
+
+            const selected = shuffled.slice(0, maxEven);
+            const teamRed = selected.slice(0, redCount);
+            const teamBlue = selected.slice(redCount, redCount + blueCount);
 
             function updateTeam(teamElement, members, color) {
                 const title = teamElement.querySelector('.team-title');
